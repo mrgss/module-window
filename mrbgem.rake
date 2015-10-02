@@ -44,7 +44,7 @@ MRuby::Gem::Specification.new('mrgss_window') do |spec|
     FileUtils.mkdir(glfw_build)
 	if ENV['OS'] == 'Windows_NT'
 		e = {}
-	    run_command e, "cmake -G \"MinGW Makefiles\" -B#{glfw_build} -H#{glfw_src}"
+	    run_command e, "cmake -G \"MSYS Makefiles\" -B#{glfw_build} -H#{glfw_src}"
     else
 		e = {}
     	run_command e, "cmake -B#{glfw_build} -H#{glfw_src}"
