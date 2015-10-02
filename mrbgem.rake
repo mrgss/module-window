@@ -58,12 +58,19 @@ MRuby::Gem::Specification.new('mrgss_window') do |spec|
   #----------------------------------------------------------------------------
   # Add GLFW dependencies to linker
   #----------------------------------------------------------------------------
-  spec.linker.libraries << 'GL'
-  spec.linker.libraries << 'X11'
-  spec.linker.libraries << 'Xrandr'
-  spec.linker.libraries << 'Xinerama'
-  spec.linker.libraries << 'Xcursor'
-  spec.linker.libraries << 'Xi'
-  spec.linker.libraries << 'Xxf86vm'
-  spec.linker.libraries << 'pthread'
+  if ENV['OS'] == 'Windows_NT'
+  	spec.linker.libraries << 'opengl32'
+	spec.linker.libraries << 'gdi32'
+	spec.linker.libraries << 'user32'
+	spec.linker.libraries << 'kernel32'
+  else
+	spec.linker.libraries << 'GL'
+  	spec.linker.libraries << 'X11'
+  	spec.linker.libraries << 'Xrandr'
+  	spec.linker.libraries << 'Xinerama'
+  	spec.linker.libraries << 'Xcursor'
+  	spec.linker.libraries << 'Xi'
+  	spec.linker.libraries << 'Xxf86vm'
+  	spec.linker.libraries << 'pthread'
+  end
 end
