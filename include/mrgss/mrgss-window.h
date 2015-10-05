@@ -13,6 +13,8 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+void
+mrb_mrgss_window_gem_init(mrb_state *mrb);
 
     typedef struct window {
         GLFWwindow *hwnd;

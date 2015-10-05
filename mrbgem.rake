@@ -58,7 +58,9 @@ MRuby::Gem::Specification.new('mrgss_window') do |spec|
   if(File.exists?("#{glfw_build}/src/libglfw3.a"))
     spec.linker.library_paths.push("#{glfw_build}/src")
     spec.linker.libraries << 'glfw3'
+	puts "#{glfw_src}/include"
     spec.cc.include_paths << "#{glfw_src}/include"
+	puts "###########################################################{spec.cc.include_paths}"
   end
   #----------------------------------------------------------------------------
   # Add GLFW dependencies to linker
