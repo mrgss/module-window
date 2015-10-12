@@ -96,7 +96,7 @@ static mrb_value update(mrb_state *mrb, mrb_value self) {
         mrgss_viewport_draw (mrb, viewport);
         SDL_GL_SwapWindow(screen->window);
         SDL_PollEvent(&screen->event);
-        if (screen->event.type == SDL_QUIT) {
+        if (screen->event.type == SDL_QUIT && screen != NULL) {
             mrb_funcall(mrb, self, "dispose", 0, NULL);
         }
     } else {
