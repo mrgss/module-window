@@ -2,20 +2,24 @@ module MRGSS
   
   class Game
   
+    attr_accessor :viewport
+     
     def initialize(title, width, height)
       @screen = Screen.new(title, width, height)      
       @viewport  = @screen.viewport
+      @running = false
     end
     
     def start
       @screen.show
+      @running = true
     end
     
     def update
-      return if @screen.disposed?
-      @screen.update
+      return @running = false if @screen.disposed?
       Keyboard.update
       Mouse.update
+      @screen.update
     end
     
     def pause
@@ -23,12 +27,14 @@ module MRGSS
     end
     
     def close
-      #@screen.dispose
+      
     end
     
     def run
       start
-      update while not  @screen.disposed?
+      while @running
+        update 
+      end
     end
     
   end

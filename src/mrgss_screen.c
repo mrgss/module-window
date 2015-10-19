@@ -13,6 +13,7 @@
 #include <mrgss/mrgss.h>
 #include <mrgss/mrgss_screen.h>
 #include <mrgss/mrgss_shader.h>
+#include <SDL2/SDL_events.h>
 
 /**
  * mruby instance data free
@@ -99,18 +100,21 @@ static mrb_value update(mrb_state *mrb, mrb_value self) {
     mrgss_screen *screen;
     mrb_value viewport;
     screen = DATA_PTR(self);
-    viewport = mrb_iv_get (mrb, self, mrb_intern_lit (mrb, "@viewport"));
     if (screen->window) {
+        SDL_PollEvent(&screen->event);
+        SDL_FlushEvents(SDL_SYSWMEVENT,SDL_LASTEVENT);
+        if (screen->event.type == SDL_APP_TERMINATING || (screen->event.type == SDL_WINDOWEVENT && screen->event.window.event == SDL_WINDOWEVENT_CLOSE)) {
+            mrb_funcall(mrb, self, "dispose", 0, NULL);
+            return mrb_nil_value();
+        }
+        viewport = mrb_iv_get (mrb, self, mrb_intern_lit (mrb, "@viewport"));
         glClearColor(1, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         mrgss_viewport_draw (mrb, viewport);
-        SDL_GL_SwapWindow(screen->window);
-        SDL_PollEvent(&screen->event);
-        if (screen != NULL && screen->event.type == SDL_QUIT) {
-            mrb_funcall(mrb, self, "dispose", 0, NULL);
-        }
+        SDL_GL_SwapWindow(screen->window);      
     } else {
         mrgss_raise(mrb, E_RUNTIME_ERROR, "already disposed");
+        return mrb_nil_value();
     }
     return self;
 }
@@ -129,6 +133,7 @@ static mrb_value dispose(mrb_state *mrb, mrb_value self) {
         DATA_PTR(self) = NULL;
     } else {
         mrgss_raise(mrb, E_RUNTIME_ERROR, "already disposed");
+        return mrb_nil_value();
     }
     return self;
 }
